@@ -129,6 +129,7 @@
         </van-row>
       </div>
       <van-button icon="arrow-up" class="top" @click="to" round></van-button>
+      <a href="#send">回到顶部</a>
     </div>
   </div>
 </template>
@@ -171,7 +172,7 @@
     background-position: -233px 0px;
   }
   .new{
-    padding: 2px 10px;
+    padding: 10px 10px;
   }
   .new img{
     width: 100%;
@@ -185,7 +186,7 @@
     font-size: 20px;
     text-align: center;
   }
-
+  
   .hot-item{
     padding: 2px 0;
   }
@@ -238,13 +239,14 @@ export default {
   methods:{
     to(){
       console.log(document.getElementById("send").offsetHeight)
+      // document.getElementById("send").scrollIntoView()
+      document.getElementById("send").scrollTo(0,0)
     }
   },
   watch: {
     height(){
       // var el = document.getElementById('send')
       console.log(this.height)
-
     }
   },
   updated() {
