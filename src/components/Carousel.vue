@@ -11,7 +11,7 @@
 <style scoped>
   .van-swipe-item img{
     width: 100%;
-    height: 100px;
+    height: 150px;
   }
 </style>
 

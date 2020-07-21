@@ -140,16 +140,16 @@
   }
   .serve{
     text-align: center;
-    line-height: 1.5rem;
-    font-size: 0.5rem;
+    line-height: 30px;
+    font-size: 12px;
     color: #888;
   }
   .icon{
     vertical-align:baseline;
-    margin-right: 0.1rem;
+    text-align: center;
   }
   .cate{
-    font-size: 0.5rem;
+    font-size: 14px;
     color: #888;
     text-align: center;
   }
