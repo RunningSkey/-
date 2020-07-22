@@ -1,3 +1,16 @@
 <template>
-  <div>这是购物车页面</div>
+  <div>
+    <carts></carts>
+  </div>
 </template>
+
+<script>
+
+import Carts from '../components/cart/Carts'
+
+export default {
+  components:{
+    Carts
+  }
+}
+</script>

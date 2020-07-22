@@ -1,5 +1,6 @@
 <template>
   <div class="swipe">
+    <!-- 首页轮播 -->
     <van-swipe :autoplay="3000" indicator-color="white">
       <van-swipe-item v-for="(v,k) in swipeImg" :key="k">
         <img v-lazy="v.img" alt="">
@@ -11,7 +12,7 @@
 <style scoped>
   .van-swipe-item img{
     width: 100%;
-    height: 150px;
+    height: 135px;
   }
 </style>
 

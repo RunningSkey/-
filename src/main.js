@@ -4,6 +4,19 @@ import router from './router'
 import store from './store'
 Vue.config.productionTip = false
 
+
+
+// 全局组件
+import TabBar from './components/global/TabBar.vue'
+import Search from './components/global/Search.vue'
+
+Vue.component('tab-bar',TabBar);
+Vue.component('search',Search);
+
+
+
+
+
 // ajax
 import axios from 'axios'
 axios.defaults.baseURL = 'http://127.0.0.1:3000'

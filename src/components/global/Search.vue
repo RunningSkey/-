@@ -6,7 +6,7 @@
         placeholder="搜索商品"
         shape="round"
         left-icon="search"
-        background="#4fc08d"      
+        background="#4fc08d"       
       />
     </form>
   </div>
@@ -17,6 +17,7 @@
     position: fixed;
     top: 0;
     width: 100%;
+    z-index: 999;
   }
 </style>
 
