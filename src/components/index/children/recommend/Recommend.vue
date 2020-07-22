@@ -57,17 +57,17 @@ export default {
       // console.log(this.$refs.recommend.scrollHeight)
       // console.log(e);
       // window.scrollTo(0,0)
-      console.log(window.screenTop,this.$refs.recommend.screenTop)
+      // console.log(window.screenTop,this.$refs.recommend.screenTop)
     }
   },
   mounted(){
-    window.addEventListener('scroll',this.show,true)
+    // window.addEventListener('scroll',this.show,true)
     // this.height = this.$refs.recommend.offsetHeight
   },
   watch: {
-    height(){
-      console.log(this.height)
-    }
+    // height(){
+    //   console.log(this.height)
+    // }
   },
   
 }

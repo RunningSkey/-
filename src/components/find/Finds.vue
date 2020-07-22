@@ -2,7 +2,7 @@
   <div>
     <div>
       <!-- 头标题 -->
-      <div class="title">发现</div>
+      <div class="title top">发现</div>
       <!-- 内容 -->
       <div class="content">
         <!-- 轮播 -->
