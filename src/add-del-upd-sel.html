@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <!-- 引入样式 -->
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+  <!-- 引入组件库 -->
+  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+</head>
+<body>
+  <div id="app" style="margin: auto;width: 900px;padding: 10px 20px; border: 1px solid lightgray;">
+    <div class="container">
+      <!-- 顶部添加内容 -->
+      <div class="title">
+        <!-- 添加新用户 -->
+        <!-- 按钮 -->
+        <el-button @click="dialogFormVisible = true">添加</el-button>
+        <!-- 内容显示 -->
+        <el-dialog title="新用户添加" :visible.sync="dialogFormVisible">
+          <el-form :model="user">
+            <el-form-item label="用户名" :label-width="formLabelWidth">
+              <el-input v-model="user.uname" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="性别" :label-width="formLabelWidth">
+              <el-select v-model="user.sex" placeholder="请选择性别">
+                <el-option label="男" value="男"></el-option>
+                <el-option label="女" value="女"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="工作" :label-width="formLabelWidth">
+              <el-select v-model="user.work_no" placeholder="是否工作">
+                <el-option label="是" value="1"></el-option>
+                <el-option label="否" value="0"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="备注" :label-width="formLabelWidth">
+              <el-input v-model="user.more" autocomplete="off"></el-input>
+            </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="cancel">取 消</el-button>
+            <el-button type="primary" @click="add">确 定</el-button>
+          </div>
+        </el-dialog>
+      </div>
+
+      <!-- 表格主要内容 -->
+      <div class="content" style="margin: 10px auto;" v-if="data">
+        <el-table :data="data" border
+        style="width: 100%;text-align: center;">
+          <el-table-column label="用户编号">
+            <template slot-scope="scope">
+              <span>{{ scope.row.uid }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="用户名">
+            <template slot-scope="scope">
+              <span>{{ scope.row.uname }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="性别">
+            <template slot-scope="scope">
+              <span>{{ scope.row.sex }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="工作">
+            <template slot-scope="scope">
+              <span>{{ scope.row.work_no }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="备注">
+            <template slot-scope="scope">
+              <span>{{ scope.row.more }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作">
+            <template slot-scope="scope">
+              <!-- 编辑 -->
+              <el-button @click="updateShow(scope.$index,scope.row)" style="margin-left: 16px;"
+              type="primary" icon="el-icon-edit" circle></el-button>
+
+              <el-drawer :visible.sync="drawer">
+                <el-form :model="updateObj" :label-width="40" style="padding: 20px;">
+                  <el-form-item label="用户名" :label-width="formLabelWidth">         
+                    <el-input v-model="updateObj.uname" autocomplete="off"></el-input>
+                  </el-form-item>
+                  <el-form-item label="性别" :label-width="formLabelWidth">
+                    <el-select v-model="updateObj.sex" placeholder="请选择性别">
+                      <el-option label="男" value="男"></el-option>
+                      <el-option label="女" value="女"></el-option>
+                    </el-select>
+                  </el-form-item>
+                  <el-form-item label="工作" :label-width="formLabelWidth">
+                    <el-select v-model="updateObj.work_no" placeholder="是否工作">
+                      <el-option label="是" value="1"></el-option>
+                      <el-option label="否" value="0"></el-option>
+                    </el-select>
+                  </el-form-item>
+                  <el-form-item label="更多" :label-width="formLabelWidth">         
+                    <el-input v-model="updateObj.more" autocomplete="off"></el-input>
+                  </el-form-item>
+                </el-form>
+
+                <!-- 方法 -->
+                <div class="demo-drawer__footer" style="padding: 20px;">
+                  <el-button @click="drawer = false">取 消</el-button>
+                  <el-button type="primary" @click="update">修 改</el-button>
+                </div>
+              </el-drawer>
+
+
+              <!-- 删除 -->
+              <el-button @click.native.prevent="deleteRow(scope.$index, data)" type="danger" icon="el-icon-delete" circle></el-button>
+            </template>
+          </el-table-column>            
+        </el-table>
+      </div>
+      
+    </div>
+  </div>
+  <script>
+    new Vue({
+        el: '#app',
+        data: {
+          // 修改模拟对象
+          updateObj:{
+            uid: '',
+            uname: '',
+            sex: '',
+            work_no: '',
+            more: '', 
+          },
+          // 修改数组对象中的哪一个
+          updateIndex:0,
+          drawer: false,
+          // 显示表单
+          dialogFormVisible: false,
+          formLabelWidth: '70px',
+          // 添加新用户模板
+          user:{
+            uid: '',
+            uname: '',
+            sex: '',
+            work_no: '',
+            more: '',            
+          },
+          // 模拟远程数据
+          dataFar:[
+            {
+              uid: 1,
+              uname: '张三',
+              sex: "男",
+              work_no: '否',
+              more: '这家伙很懒!什么也没留下'
+            },
+            {
+              uid: 2,
+              uname: '李四',
+              sex: "女",
+              work_no: '是',
+              more: '哈哈哈哈!'
+            }
+          ],
+          // 模拟本地数据
+          data:[]
+        },       
+        methods:{
+          // 查找
+          getData(){
+            this.data = this.dataFar
+            console.log(this.data)
+          },
+          // 添加
+          add(){
+            // 关闭弹框
+            this.dialogFormVisible = false
+            // 获取原来数组最后一个的编号
+            let length = 1
+            if(this.dataFar.length) {length = this.dataFar[this.dataFar.length-1].uid+1}
+            let n = parseInt(length)
+            let user = {
+              uid: n,
+              uname: this.user.uname,
+              sex: this.user.sex,
+              work_no: this.user.work_no,
+              more: this.user.more
+            }
+            this.dataFar.push(user)
+            this.getData()
+            this.user = {
+              uid: '',
+              uname: '',
+              sex: '',
+              work_no: '',
+              more: '',  
+            }
+          },
+          cancel(){
+            this.dialogFormVisible = false
+            this.user = {
+              uid: '',
+              uname: '',
+              sex: '',
+              work_no: '',
+              more: '',  
+            }
+          },
+          // 删除
+          deleteRow(index, rows) {
+            rows.splice(index, 1);
+          },
+          // 修改
+          updateShow(index,obj){
+            this.drawer = true
+            console.log(index,obj)
+            let {uid,uname,sex,work_no,more} = obj
+            this.updateObj.uid = uid
+            this.updateObj.uname = uname
+            this.updateObj.sex = sex
+            this.updateObj.work_no = work_no
+            this.updateObj.more = more
+            // console.log(uname)
+            this.updateIndex = index
+          },
+          // 确认修改
+          update(){
+            this.dataFar.splice(this.updateIndex,1,this.updateObj)
+            this.getData()
+            this.updateObj = {
+              uid: '',
+              uname: '',
+              sex: '',
+              work_no: '',
+              more: '', 
+            }
+            this.drawer = false
+          }
+        },
+        mounted(){
+          this.getData()
+        }
+    })
+  </script>
+</body>
+</html>

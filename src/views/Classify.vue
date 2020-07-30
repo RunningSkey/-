@@ -18,6 +18,9 @@ export default {
   components:{
     Classifys
   },
+  methods:{
+    add(){}
+  }
 
 }
 </script>
