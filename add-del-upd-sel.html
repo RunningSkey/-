@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <!-- 必须先引vue -->
   <script src="https://cdn.jsdelivr.net/npm/vue"></script>
   <!-- 引入样式 -->
   <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
@@ -17,8 +18,8 @@
       <div class="title">
         <!-- 添加新用户 -->
         <!-- 按钮 -->
-        <el-button @click="dialogFormVisible = true">添加</el-button>
-        <!-- 内容显示 -->
+        <el-button @click="dialogFormVisible = true">添 加</el-button>
+        <!-- 新用户添加内容显示 -->
         <el-dialog title="新用户添加" :visible.sync="dialogFormVisible">
           <el-form :model="user">
             <el-form-item label="用户名" :label-width="formLabelWidth">
@@ -47,7 +48,7 @@
         </el-dialog>
       </div>
 
-      <!-- 表格主要内容 -->
+      <!-- 表格所有内容显示 -->
       <div class="content" style="margin: 10px auto;" v-if="data">
         <el-table :data="data" border
         style="width: 100%;text-align: center;">
@@ -78,10 +79,11 @@
           </el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
-              <!-- 编辑 -->
+              <!-- 编辑按钮 -->
               <el-button @click="updateShow(scope.$index,scope.row)" style="margin-left: 16px;"
               type="primary" icon="el-icon-edit" circle></el-button>
 
+              <!-- 编辑抽屉式 -->
               <el-drawer :visible.sync="drawer">
                 <el-form :model="updateObj" :label-width="40" style="padding: 20px;">
                   <el-form-item label="用户名" :label-width="formLabelWidth">         
@@ -135,8 +137,9 @@
           },
           // 修改数组对象中的哪一个
           updateIndex:0,
+          // 抽屉式编辑区显示
           drawer: false,
-          // 显示表单
+          // 显示添加用户表单
           dialogFormVisible: false,
           formLabelWidth: '70px',
           // 添加新用户模板
@@ -171,16 +174,17 @@
           // 查找
           getData(){
             this.data = this.dataFar
-            console.log(this.data)
           },
           // 添加
           add(){
             // 关闭弹框
             this.dialogFormVisible = false
-            // 获取原来数组最后一个的编号
             let length = 1
-            if(this.dataFar.length) {length = this.dataFar[this.dataFar.length-1].uid+1}
-            let n = parseInt(length)
+            // 如果表格有内容 就获取他最后一个对象的uid
+            if(this.dataFar.length) {length = this.dataFar[this.dataFar.length-1].uid}
+            // 再在基础加1
+            let n = parseInt(length) + 1
+            // 重新创建对象,将模拟对象的数据放入
             let user = {
               uid: n,
               uname: this.user.uname,
@@ -188,8 +192,11 @@
               work_no: this.user.work_no,
               more: this.user.more
             }
+            // 再添加
             this.dataFar.push(user)
+            // 再修改表格数据
             this.getData()
+            // 最后情况表单内容
             this.user = {
               uid: '',
               uname: '',
@@ -198,6 +205,7 @@
               more: '',  
             }
           },
+          // 取消添加
           cancel(){
             this.dialogFormVisible = false
             this.user = {
@@ -210,25 +218,50 @@
           },
           // 删除
           deleteRow(index, rows) {
-            rows.splice(index, 1);
+            this.$confirm('确定要删除此用户?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            })
+            // 确定要删除
+            .then(() => {
+              // 删除当前对象
+              rows.splice(index, 1);
+              this.$message({
+                type: 'success',
+                message: '删除成功!'
+              });
+            })
+            // 取消删除
+            .catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消删除'
+              });          
+            });
           },
           // 修改
           updateShow(index,obj){
+            // 打开编辑区
             this.drawer = true
-            console.log(index,obj)
+            // 将当前要修改的对象的数据进行 数据解构
             let {uid,uname,sex,work_no,more} = obj
+            // 放入将要更新数据的对象中
             this.updateObj.uid = uid
             this.updateObj.uname = uname
             this.updateObj.sex = sex
             this.updateObj.work_no = work_no
             this.updateObj.more = more
-            // console.log(uname)
+            // 保存要修改的对象的下标
             this.updateIndex = index
           },
           // 确认修改
           update(){
+            // 确认要修改数据 删除 下标 长度为1  替换为新对象
             this.dataFar.splice(this.updateIndex,1,this.updateObj)
+            // 重新更新表格内容
             this.getData()
+            // 将 将要更新对象重置
             this.updateObj = {
               uid: '',
               uname: '',
@@ -236,6 +269,7 @@
               work_no: '',
               more: '', 
             }
+            // 关闭抽屉编辑区
             this.drawer = false
           }
         },
