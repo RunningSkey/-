@@ -181,9 +181,9 @@
             this.dialogFormVisible = false
             let length = 1
             // 如果表格有内容 就获取他最后一个对象的uid
-            if(this.dataFar.length) {length = this.dataFar[this.dataFar.length-1].uid}
+            if(this.dataFar.length) {length = this.dataFar[this.dataFar.length-1].uid+1}
             // 再在基础加1
-            let n = parseInt(length) + 1
+            let n = parseInt(length)
             // 重新创建对象,将模拟对象的数据放入
             let user = {
               uid: n,
